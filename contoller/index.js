@@ -2,10 +2,10 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const router = express.Router();
-const { User, Product, Order } = require('../model');
+const { User, Product } = require('../model');
 const user = new User();
 const product = new Product();
-const order = new Order();
+// const order = new Order();
 
 
 router.get('/', (req, res)=>{
@@ -98,4 +98,4 @@ router.delete('/product/:id',
 //     order.deleteOrder(req, res);
 // });
 
-// module.exports = router;
+module.exports = router;

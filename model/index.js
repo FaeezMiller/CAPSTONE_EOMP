@@ -2,7 +2,7 @@ const db = require('../config');
 
 const {hash, compare, hashSync } = require('bcrypt');
 
-const { createToken } = require('../middleware/AuthenticateUser');
+const { createToken } = require('../middleware/Authentication');
 
 
 //============= Users =============//
@@ -356,6 +356,6 @@ class Product {
 module.exports = {
     User, 
     Product,
-    Order,
+    // Order,
     // Cart
 }
