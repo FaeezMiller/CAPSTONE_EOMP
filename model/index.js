@@ -143,12 +143,12 @@ class User {
 //============= Products =============//
 class Product {
     fetchProducts(req, res) {
-        const querySt = `SELECT productID, imgURL, NAME, MARKETCAP, PRICE, AVAILCOINS, TOTALCOINS, TRADEVOL, CHG
+        const querySt = `SELECT productID, imgURL, NAME, MARKETCAP, PRICE, AVAILCOINS, TOTALCOINS, TRADEDVOL, CHG
         FROM Products;`;
-        db.query(querySt, (err, results)=> {
+        db.query(querySt, (err, data)=> {
             if(err) throw err;
-            res.status(200).json({results: results})
-        });
+            res.status(200).json({results: data})
+        })
     }
     fetchProduct(req, res) {
         const querySt = `productID, imgURL, NAME, MARKETCAP, PRICE, AVAILCOINS, TOTALCOINS, TRADEVOL, CHG
