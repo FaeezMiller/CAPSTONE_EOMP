@@ -11,9 +11,9 @@ class User {
         const {email, userPass} = req.body;
         const querySt = 
         `
-        SELECT firstName, lastName, gender, cellphoneNumber, emailADD, userPass, userRole, userProfile, joinDate
+        SELECT userID, firstName, lastName, gender, cellphoneNumber, emailAdd, user_password, userRole, userProfile, joinDate
         FROM Users
-        WHERE emailDD = '${email}';
+        WHERE emailAdd = '${email}';
         `;
         db.query(querySt, async (err, data)=>{
             if(err) throw err;
@@ -21,14 +21,14 @@ class User {
                 res.status(401).json({err: 
                     "Incorrect email address"});
             }else {
-                await compare(userPass, 
-                    data[0].userPass, 
+                await compare(user_password, 
+                    data[0].user_password, 
                     (uErr, uResult)=> {
                         if(uErr) throw uErr;
                         const jToken = 
                         createToken(
                             {
-                                email, userPass  
+                                email, user_password  
                             }
                         );
                         res.cookie('Valid User',
@@ -54,7 +54,7 @@ class User {
     fetchUsers(req, res) {
         const querySt = 
         `
-        SELECT firstName, lastName, gender, cellphoneNumber, emailADD, userPass, userRole, userProfile, joinDate
+        SELECT userID, firstName, lastName, gender, cellphoneNumber, emailAdd, userPass, userRole, userProfile, joinDate
         FROM Users
         `;
         
@@ -67,7 +67,7 @@ class User {
     fetchUser(req, res) {
         const querySt = 
         `
-        SELECT firstName, lastName, gender, cellphoneNumber, emailADD, userPass, userRole, userProfile, joinDate
+        SELECT userID, firstName, lastName, gender, cellphoneNumber, emailAdd, userPass, userRole, userProfile, joinDate
         FROM Users
         WHERE userID = ?;
         `;
@@ -86,7 +86,7 @@ class User {
         hash(info.userPass, 15);
         let user = {
             email: info.email,
-            userPass: info.userPass
+            userPass: info.user_password
         }
         
         const querySt =
@@ -108,9 +108,9 @@ class User {
     }
     updateUser(req, res) {
         let data = req.body;
-        if(data.userPass !== null || 
-            data.userPass !== undefined)
-            data.userPass = hashSync(data.userPass, 15);
+        if(data.user_password !== null || 
+            data.user_password !== undefined)
+            data.user_password = hashSync(data.user_password, 15);
         const querySt = 
         `
         UPDATE Users
@@ -143,7 +143,7 @@ class User {
 //============= Products =============//
 class Product {
     fetchProducts(req, res) {
-        const querySt = `SELECT id, name, author, description, date_created, imgURL, price, quantity, category
+        const querySt = `SELECT productID, imgURL, NAME, MARKETCAP, PRICE, AVAILCOINS, TOTALCOINS, TRADEVOL, CHG
         FROM Products;`;
         db.query(querySt, (err, results)=> {
             if(err) throw err;
@@ -151,9 +151,9 @@ class Product {
         });
     }
     fetchProduct(req, res) {
-        const querySt = `SELECT id, name, author, description, date_created, imgURL, price, quantity, category
+        const querySt = `productID, imgURL, NAME, MARKETCAP, PRICE, AVAILCOINS, TOTALCOINS, TRADEVOL, CHG
         FROM Products
-        WHERE id = ?;`;
+        WHERE productID = ?;`;
         db.query(querySt, [req.params.id], (err, results)=> {
             if(err) throw err;
             res.status(200).json({results: results})
@@ -182,7 +182,7 @@ class Product {
         `
         UPDATE Products
         SET ?
-        WHERE id = ?
+        WHERE productID = ?
         `;
         db.query(querySt,[req.body, req.params.id],
             (err)=> {
@@ -199,7 +199,7 @@ class Product {
         const querySt = 
         `
         DELETE FROM Products
-        WHERE id = ?;
+        WHERE productID = ?;
         `;
         db.query(querySt,[req.params.id], (err)=> {
             if(err) res.status(400).json({err: "Unable to find product."});
@@ -208,72 +208,72 @@ class Product {
     }
 }
 //============= Orders =============//
-class Order {
-    fetchOrders(req, res) {
-        const querySt = `SELECT id, userID, productID, quantity, orderDate, totalPrice
-        FROM Orders;`;
-        db.query(querySt, (err, results)=> {
-            if(err) throw err;
-            res.status(200).json({results: results})
-        });
-    }
-    fetchOrder(req, res) {
-        const querySt = `SELECT id, userID, productID, quantity, orderDate, totalPrice
-        FROM Orders
-        WHERE id = ?;`;
-        db.query(strQry, [req.params.id], (err, results)=> {
-            if(err) throw err;
-            res.status(200).json({results: results})
-        });
+// class Order {
+//     fetchOrders(req, res) {
+//         const querySt = `SELECT id, userID, productID, quantity, orderDate, totalPrice
+//         FROM Orders;`;
+//         db.query(querySt, (err, results)=> {
+//             if(err) throw err;
+//             res.status(200).json({results: results})
+//         });
+//     }
+//     fetchOrder(req, res) {
+//         const querySt = `SELECT id, userID, productID, quantity, orderDate, totalPrice
+//         FROM Orders
+//         WHERE id = ?;`;
+//         db.query(strQry, [req.params.id], (err, results)=> {
+//             if(err) throw err;
+//             res.status(200).json({results: results})
+//         });
 
-    }
-    addOrder(req, res) {
-        const strQry = 
-        `
-        INSERT INTO Orders
-        SET ?;
-        `;
-        db.query(strQry,[req.body],
-            (err)=> {
-                if(err){
-                    res.status(400).json({err: "Unable to create new order."});
-                }else {
-                    res.status(200).json({msg: "Successfully created new order."});
-                }
-            }
-        );    
+//     }
+//     addOrder(req, res) {
+//         const strQry = 
+//         `
+//         INSERT INTO Orders
+//         SET ?;
+//         `;
+//         db.query(strQry,[req.body],
+//             (err)=> {
+//                 if(err){
+//                     res.status(400).json({err: "Unable to create new order."});
+//                 }else {
+//                     res.status(200).json({msg: "Successfully created new order."});
+//                 }
+//             }
+//         );    
 
-    }
-    updateOrder(req, res) {
-        const querySt = 
-        `
-        UPDATE Orders
-        SET ?
-        WHERE id = ?
-        `;
-        db.query(querySt,[req.body, req.params.id],
-            (err)=> {
-                if(err){
-                    res.status(400).json({err: "Could not update order."});
-                }else {
-                    res.status(200).json({msg: "Order successfully updated"});
-                }
-            }
-        );    
+//     }
+//     updateOrder(req, res) {
+//         const querySt = 
+//         `
+//         UPDATE Orders
+//         SET ?
+//         WHERE id = ?
+//         `;
+//         db.query(querySt,[req.body, req.params.id],
+//             (err)=> {
+//                 if(err){
+//                     res.status(400).json({err: "Could not update order."});
+//                 }else {
+//                     res.status(200).json({msg: "Order successfully updated"});
+//                 }
+//             }
+//         );    
 
-    }
-    deleteOrder(req, res) {
-        const querySt = 
-        `
-        DELETE FROM Orders
-        WHERE id = ?;
-        `;
-        db.query(querySt,[req.params.id], (err)=> {
-            if(err) res.status(400).json({err: "Unable to find order."});
-            res.status(200).json({msg: "Successfully deleted order."});
-        })
-    }
-}
+//     }
+//     deleteOrder(req, res) {
+//         const querySt = 
+//         `
+//         DELETE FROM Orders
+//         WHERE id = ?;
+//         `;
+//         db.query(querySt,[req.params.id], (err)=> {
+//             if(err) res.status(400).json({err: "Unable to find order."});
+//             res.status(200).json({msg: "Successfully deleted order."});
+//         })
+//     }
+// }
 
 
 //============= Cart =============//

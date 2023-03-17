@@ -70,32 +70,32 @@ router.delete('/product/:id',
 });
 
 
-// =====Orders======
-// View all orders
-router.get('/orders', (req, res)=> {
-    order.fetchOrders(req, res);
-});
-// View a single order
-router.get('/orders/:id', 
-(req, res)=> {
-    order.fetchOrder(req, res);
-});
-// Update an order
-router.put('/order/:id', 
-bodyParser.json(),
-(req, res)=> {
-    order.updateOrder(req, res);
-});
-// Create a new order
-router.post('/order', 
-bodyParser.json(), 
-(req, res)=> {
-    order.addOrder(req, res);
-});
-// Delete an order
-router.delete('/order/:id', 
-(req, res)=> {
-    order.deleteOrder(req, res);
-});
+// // =====Orders======
+// // View all orders
+// router.get('/orders', (req, res)=> {
+//     order.fetchOrders(req, res);
+// });
+// // View a single order
+// router.get('/orders/:id', 
+// (req, res)=> {
+//     order.fetchOrder(req, res);
+// });
+// // Update an order
+// router.put('/order/:id', 
+// bodyParser.json(),
+// (req, res)=> {
+//     order.updateOrder(req, res);
+// });
+// // Create a new order
+// router.post('/order', 
+// bodyParser.json(), 
+// (req, res)=> {
+//     order.addOrder(req, res);
+// });
+// // Delete an order
+// router.delete('/order/:id', 
+// (req, res)=> {
+//     order.deleteOrder(req, res);
+// });
 
-module.exports = router;
+// module.exports = router;

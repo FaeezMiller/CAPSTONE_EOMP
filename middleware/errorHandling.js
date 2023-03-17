@@ -4,7 +4,7 @@ function errorHandling(err, req, res, next) {
         res.status(status).json(
             {
                 status: status,
-                err: "An error occured. Please come by later."
+                err: "An error occurred. Please come by later."
             }
         )
     }
