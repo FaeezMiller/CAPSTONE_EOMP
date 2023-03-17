@@ -1,5 +1,5 @@
-const mysql = require('mysql');
-require('dotenv');
+const mysql = require('mysql2');
+require('dotenv').config();
 
 let con = mysql.createConnection({
     host:process.env.HOST,
